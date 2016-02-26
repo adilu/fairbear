@@ -38,7 +38,7 @@
 
 
 
-
+  <plugin name="Geolocation" value="org.apache.cordova.GeoBroker"/>
 	<plugin name="cordova-plugin-whitelist" />
   <allow-navigation href="*" />
 
