@@ -1,0 +1,157 @@
+@charset "UTF-8";
+    body {
+		margin:0px;
+		font-family:Helvetica;
+		background-color: #615761;
+		text-align: center;
+    }
+	
+	.mainpart {
+	margin-top: 50px;
+	margin-left: 5px;
+	margin-right: 5px;
+	}
+
+/* header */	
+    .title-bar {
+		position: fixed;
+		left: 0px;
+		right: 0px;
+		top: 0px;
+		display: -webkit-box;
+		display: -moz-box;
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-box-pack: justify;
+		-webkit-box-align: center;
+		-webkit-align-items: center;
+		ms-flex-align: center;
+		align-items: center;
+		-webkit-justify-content: space-between;
+		justify-content: space-between;
+		background-color:#191924;
+		text-align: center;
+		font-weight: bold;
+		font-size: 1.5em;
+		color: #D80A2A;
+		height: 40px;
+    }
+
+    .app-name {
+		flex:2 2 auto;
+    }
+
+    .menu-button, .shop-button {
+		font-size: 75%;
+		color: #980E2E;
+		text-decoration: none;
+		background-color: #191924;
+		margin: 5px;
+    }
+	
+	
+/* menu */
+	#flyout-navigation {
+		position: fixed;
+		top: 40px;
+		background-color: #191924;
+		border-style: solid;
+		border-color: #191924;
+		color: #D80A2A;
+		font-weight: bold;
+	}
+	
+/* links, e.g. of the menu - does not look like a link anymore, but like a button */
+	a{
+		margin: 0px 0px;
+		padding: 1px;
+		display: block;
+		color: #D80A2A;
+		text-decoration: none;
+	}
+	
+/* links that should be recognized as such, for external links, e.g. the google form or biofarm or such */	
+	.erkennbarerlink{
+		border: 0px;
+		border-radius: 0px;
+		display: inline;
+		padding: 0px 0px;
+		background-color: none;
+	}
+	
+	.erkennbarerlink:link{
+		color: blue;
+		text-decoration: underline;
+	}
+	.erkennbarerlink:visited{
+		color: blue;
+		text-decoration: underline;
+	}
+	.erkennbarerlink:hover{
+		color: blue;
+		text-decoration: underline;
+	}
+	
+/* also mainly for the links of the menu */
+	td {
+		padding: 10px;
+		border: 1px solid black;
+	}
+	
+	
+/* the google map */
+	#map {
+		position: absolute;
+		z-index: -1;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+	
+	
+/* off-white background color for shop-table and 'über die app' */
+	.uberdieapp, .shop, .oeffnungszeiten, .shop--detail {
+		background-color: #FFE6F9;
+	}
+	
+/* überschriften und fragen in 'über die app' */
+	bold {
+		font-weight: bold;
+	}
+
+/* shadow for shop-table, needs work */
+	.uberdieapp, .oeffnungszeiten {
+		box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+	}
+	
+/* makes shop-details disappear */
+	.shop--detail {
+		display: none;
+	}
+	
+/* used with toggle class, shop details appear again */
+	.oeffnungszeiten.active .shop--detail{
+		display: block;
+	}
+	
+	.mehr.active .shop--detail{
+		display: inline;
+	}
+	
+/* shoptable */
+	.shop {
+		margin: 10px;
+	}
+	
+/* button to close pop-up on the map */
+	.schliessen {
+	text-decoration: underline;
+	color: #D80A2A;
+	}
+	
+/* star that marks stores as favorites */
+	star, star1 {
+	font-size: 1.5em;
+	}

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+  <title> Fairbear </title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Content-Security-Policy" content=" default-src 'none'; script-src 'self' 'unsafe-inline' https://*.googleapis.com https://*.google.com data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com http://www.google.com http://csi.gstatic.com http://maps.gstatic.com http://mts0.google.com http://mts1.google.com; img-src 'self' http://*.gstatic.com https://*.google.com https://*.googleapis.com; child-src  https://*.google.com; font-src https://*.gstatic.com; media-src *">
+<link rel="apple-touch-icon" href="icon-iphone.png" />
+<link rel="stylesheet" type="text/css" href="main3.css">
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="main.js"></script>
+  </head>
+  <body>
+  <!-- header: Menu-link plus title plus another link -->
+	<div class="title-bar"> 
+	<div class="menu-button"><img src="menu.png" width="30" height="30" alt="Menu"></div>
+	<div class="app-name">FAIRBEAR</div>
+	<div class="shop-button"><a href="shops.html"><img src="shoptable1.png" width="30" height="30" alt="Shops"></a></div>
+	</div>
+	<!-- menu -->
+	<table id="flyout-navigation" style="display: none;">  
+	<tr> <td> <a href="index.html" >Karte</a> </td> </tr>
+	<tr> <td> <a href="shops.html">Shops</a> </td> </tr>
+	<tr> <td> <a href="shops.html?nurFavoriten=true" >Favoriten</a> </td> </tr>
+	<tr> <td> <a href="linksammlung.html">Links</a> </td> </tr>
+	<tr> <td> <a href="geschaft hinzufugen.html" >Geschäft hinzufügen</a> </td> </tr>
+	<tr> <td> <a href="uber mich.html">Über das App</a> </td> </tr> </table>
+	<!-- content of the site -->
+    <div id="map"></div>
+    <script>
+	
+//-----------------------------------------------------------------------------------------------------------------
+// INTRODUCTION WHEN APP IS OPENED FOR THE FIRST TIME
+
+		var applaunchCount = window.localStorage.getItem('launchCount');
+
+		//Check if it already exists or not
+		if(applaunchCount){
+			//This is a second time launch, and count = applaunchCount
+		}
+		else{
+			//Local storage is not set, hence first time launch. set the local storage item
+			window.localStorage.setItem('launchCount',1);
+			alert('Herzlich Willkommen im App FairBear! Ich hoffe, Sie finden ab jetzt alle Bio- und Fairtrade-Produkte, die Sie suchen. Falls Sie Fragen zur App haben, dann schauen Sie unter "Über die App" nach oder schreiben mir. Einen kleinen Hinweis noch: Wenn man auf einen Stern klickt, wird der Shop zu den Favoriten hinzugefügt oder von ihnen gelöscht. Viel Spass!');
+		}
+        
+//-----------------------------------------------------------------------------------------------------------------
+// AUSLESEN DER FAVORITEN AUS DEM LOCAL STORAGE
+        
+        if(localStorage.favoriten) {
+            var favoriten = JSON.parse(localStorage.favoriten);
+            console.log("Ihre Favoriten sind: " + favoriten.join(", "));
+        }
+        else {
+            var favoriten = [];
+            console.log("Sie haben noch keine Favoriten.")
+        }
+//-----------------------------------------------------------------------------------------------------------------
+// CREATE GOOGLE MAP
+        
+function initMap() {
+  var myLatLng = {lat: 46.975790301698176, lng: 7.651510351562479};
+
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 8,
+    center: myLatLng,
+  });
+  
+  
+  var url = 'https://spreadsheets.google.com/feeds/cells/1xfaIhXvK3wb0FeRsfQfNDHmarxlfcF-p9sIyr0dLgJE/ou12nh7/public/values?alt=json-in-script&callback=?';
+
+    //------------------------------------------------------------------------------------------------------------------------
+    // Hier laden Sie die Positionen der Läden. Da dies innerhalb der Funktion initMap geschieht, steht die Karte schon bereit.
+    //.......................................................................................................................
+    $.getJSON(url, cellEntries);
+    
+    function cellEntries(json) {
+        
+        
+      //------------------------------------------------------------------------------------------------------------------------
+      // Hier werden die Positionen der Shops ausgelesen....
+      
+      var shops = []; //Sammeln der Shops in einem Array
+	  var shopinfos = []; // Sammeln der Shop-Infos in einem Array
+      
+      
+      for (var i=16; i < json.feed.entry.length; i++) {
+     
+        var entry = json.feed.entry[i];
+        
+		//-------------------------------------------------------------------------------------------------------
+		// COLLECTING SHOPS IN ARRAY
+        if (entry.gs$cell.col == '1') {
+            var nextShop = {}; //einen neuen Shop eröffnen falls Spalte == 1
+            shops.push(nextShop); //diesen Shop zum Array (=Sammlung alle Shops) hinzufügen.
+            nextShop.lat = +entry.gs$cell.$t; //die Latitude des neuen Shops setzen. Das Pluszeichen bewirkt, dass es eine Zahl ist und keine Zeichenkette (string)
+        }
+        if(entry.gs$cell.col == '2') {
+            nextShop.lng = +entry.gs$cell.$t; //die Longitude des neuen Shops setzen
+        };
+		
+		//------------------------------------------------------------------------------------------------------------
+		// COLLECTING SHOP-INFOS IN ANOTHER ARRAY
+		if (entry.gs$cell.col == '3') {
+			var nextShopinfo = {};
+			shopinfos.push(nextShopinfo);
+			nextShopinfo.Titel = entry.gs$cell.$t;
+		};
+			// STORE DESCRIPTION
+			if(entry.gs$cell.col == '4') {
+				nextShopinfo.Beschreibung = entry.gs$cell.$t;
+			};
+			//OPENING HOURS MONDAY
+			if (entry.gs$cell.col == '5') {
+				nextShopinfo.Montag == entry.gs$cell.$t;
+			};
+			//OPENING HOURS TUESDAY
+			if (entry.gs$cell.col == '6') {
+				nextShopinfo.Dienstag == entry.gs$cell.$t;
+			};
+			//OPENING HOURS WEDNESDAY
+			if (entry.gs$cell.col == '7') {
+				nextShopinfo.Mittwoch == entry.gs$cell.$t;
+			};
+			//OPENING HOURS THURSDAY
+			if (entry.gs$cell.col == '8') {
+				nextShopinfo.Donnerstag == entry.gs$cell.$t;
+			};
+			//OPENING HOURS FRIDAY
+			if (entry.gs$cell.col == '9') {
+				nextShopinfo.Freitag == entry.gs$cell.$t;
+			};
+			//OPENING HOURS SATURDAY
+			if (entry.gs$cell.col == '10') {
+				nextShopinfo.Samstag == entry.gs$cell.$t;
+			};
+			//OPENING HOURS SUNDAY
+			if (entry.gs$cell.col == '11') {
+				nextShopinfo.Sonntag == entry.gs$cell.$t;
+			};
+			//AMOUNT OF ORGANIC PRODUCTS
+			if (entry.gs$cell.col == '12') {
+				nextShopinfo.Bioprodukte == entry.gs$cell.$t;
+			};
+			//AMOUNT OF FAIRTRADE PRODUCTS
+			if (entry.gs$cell.col == '13') {
+				nextShopinfo.Fairtradeprodukte == entry.gs$cell.$t;
+			};
+			//AMOUNT OF REGIONAL PRODUCTS
+			if (entry.gs$cell.col == '14') {
+				nextShopinfo.Regionaleprodukte == entry.gs$cell.$t;
+			};
+			//RANGE OF PRODUCTS
+			if (entry.gs$cell.col == '15') {
+				nextShopinfo.Sortiment == entry.gs$cell.$t;
+			};
+			//CERTIFICATION LABELS FOR ORGANIC PRODUCTS
+			if (entry.gs$cell.col == '16') {
+				nextShopinfo.Labels == entry.gs$cell.$t;
+			};
+  };
+
+      
+        
+		//-----------------------------------------------------------------------------------------------------------------
+        //Nun liegen Listen mit allen Shops und allen Shop-Infos vor:
+        console.log(shops);
+		console.log(shopinfos);
+
+        
+      //------------------------------------------------------------------------------------------------------------------------
+        //ADD SHOPS AS MARKERS ON THE MAP
+		for(i=0; i<shops.length; i++) {
+		 shops[i].marker = new google.maps.Marker({
+			 position: {lat: shops[i].lat, lng: shops[i].lng},
+			 map: map,
+			 title: shopinfos[i].Titel,
+			 //label: i,
+		 });
+		 shops[i].marker.addListener("click", showDetails) //beim Klicken auf einen Shop wird die Funktion showDetails aufgerufen -> Pop-up
+		}
+	  
+		//-----------------------------------------------------------------------------------------------------------------------
+		//POP-UP
+		function showDetails() {
+			for (i=0; i<shops.length; i++) {
+				if(this.title === shopinfos[i].Titel) {
+				  $(".popup").remove(); //max 1 Popup, entferne bestehende Popups;
+				  $('<div class="popup" style="position:absolute; z-index: 2; font-size:0.8em; background-color: white; padding: 1em; margin:auto; width: 60%; left: 20%; top: 100px;"><h3><div>' +
+                    shopinfos[i].Titel + '</div><star>&#9734;</star></h3><div>' + shopinfos[i].Beschreibung + '</div><br><p class="mehr" style="font-style: italic; color: #D80A2A;"> Mehr: </p> <br> <div class="shop--detail"> Montag: ' + shopinfos[i].Montag 
+					+ '</div> <br><p class="schliessen" style="display: inline;">Schliessen</p></div>')
+					.appendTo('body'); // Creation of pop-up when marker is clicked
+					$('.schliessen').on("click", function() {$(".popup").remove();}); // 'schliessen' becomes button that closes the pop-up
+					$('.mehr').on("click", function() {$('.mehr').toggleClass('active');});
+
+					};
+
+						//--------------------------------------------------------------------------------------------------
+						//MARK FAVOURITE STORES WITH A BLACK STAR
+						for (var z=0; z<favoriten.length; z++) {
+						if(this.title === favoriten[z]) {
+						$('star').replaceWith('<star1>&#9733;</star1>')};
+						};
+					
+					//-----------------------------------------------------
+					//ADD STORES AS FAVORITES
+					$('star').on('click', function() {			
+						//Hinzufügen des geklickten Shops zu den Favoriten:
+						var title = $(this).closest("h3").find("div").text();
+						console.log(title);
+						if( !localStorage.favoriten || localStorage.favoriten.indexOf(title)<0) { //Falls es den Shop noch nicht in den Favoriten hat, füge ihn hinzu.
+							favoriten.push(title);
+						}
+						
+						localStorage.favoriten = JSON.stringify(favoriten); //Speichere die Favoriten im Localstorage.
+						console.log("Sie haben " + title + " zu den Favoriten hinzugefügt. Sie haben nun insgesamt " + favoriten.length + " Favoriten");
+						$(this).replaceWith('<star1>&#9733;</star1>');})
+					
+					//-----------------------------------------------------
+					//DELETE STORE FROM FAVORITES	
+					$('star1').on('click', function() {
+						var title = $(this).closest("h3").find("div").text();
+						console.log(title);
+						favoriten.splice(favoriten.indexOf(title), 1);
+						localStorage.favoriten = JSON.stringify(favoriten);
+						$(this).replaceWith('<star>&#9734;</star>');
+					});						
+							};
+			
+				
+							
+
+			};
+
+			
+		};
+
+
+    
+
+  //--------------------------------------------------------------
+  // LOAD POSITION OF USER
+  if (navigator.geolocation) {
+      //Hier wird die Position gesucht. Im Erfolgsfall wird die Funktion showPosition ausgeführt.
+      navigator.geolocation.getCurrentPosition(function showPosition(pos) {
+        Standort = new google.maps.Marker({
+          position: {lat: pos.coords.latitude, lng: pos.coords.longitude},
+          map: map,
+          label: "S",
+          title: "Mein Standort",
+        });
+		
+		Standort.addListener("click", showMyPosition);
+		function showMyPosition () {alert('Mein Standort')};
+      }, function(error) {console.log(error)}, {enableHighAccuracy : false});
+  };		
+			
+};
+
+        
+    </script>
+	<script>
+</script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?signed_in=true&callback=initMap"></script>
+	<script> window.scrollTo(0, 1); </script>
+  </body>
+</html>

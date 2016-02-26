@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<title> Fairbear </title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Content-Security-Policy" content=" default-src 'none'; script-src 'self' 'unsafe-inline' https://*.googleapis.com https://*.google.com data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com http://www.google.com http://csi.gstatic.com http://maps.gstatic.com http://mts0.google.com http://mts1.google.com; img-src 'self' http://*.gstatic.com https://*.google.com https://*.googleapis.com; child-src  https://*.google.com; font-src https://*.gstatic.com; media-src *">
+<link rel="apple-touch-icon" href="icon-iphone.png" />
+<link rel="stylesheet" type="text/css" href="main3.css">
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="main.js"></script>
+</head>
+	<body>
+	<!-- header: Menu-link plus title plus another link -->
+	<div class="title-bar">
+	<div class="menu-button"><img src="menu.png" width="30" height="30" alt="Menu"></div>
+	<div class="app-name">FAIRBEAR</div>
+	<div class="shop-button"><a href="index.html"><img src="map.png" width="30" height="30" alt="Karte"></a></div>
+	</div>
+	<!-- menu -->
+	<table id="flyout-navigation" style="display: none;">
+	<tr> <td> <a href="index.html" >Karte</a> </td> </tr>
+	<tr> <td> <a href="shops.html">Shops</a> </td> </tr>
+	<tr> <td> <a href="shops.html?nurFavoriten=true">Favoriten</a> </td> </tr>
+	<tr> <td> <a href="linksammlung.html">Links</a> </td> </tr>
+	<tr> <td> <a href="geschaft hinzufugen.html" >Geschäft hinzufügen</a> </td> </tr>
+	<tr> <td> <a href="uber mich.html">Über das App</a> </td> </tr> </table>
+	<!-- content of the site -->
+		<div class="mainpart">
+		<img src="logo2.png" width="100" height="100" alt="hier sollte das logo sein">
+		<br>Suche: <input class='suche' name="sucheingabe"> z.B. PLZ<br>
+		<div id="results"></div>
+		</div>
+ <script>var url = 'https://spreadsheets.google.com/feeds/cells/1xfaIhXvK3wb0FeRsfQfNDHmarxlfcF-p9sIyr0dLgJE/o5l3x28/public/values?alt=json-in-script&callback=?';
+
+ //------------------------------------------------------------------------------
+ // LOAD JSON
+$.getJSON(url, cellEntries);
+
+function cellEntries(json) {
+
+//--------------------------------------------------------------------------------
+//CREATE SHOP-TABLES
+  for (var i=16; i < json.feed.entry.length; i++) {
+    var entry = json.feed.entry[i];
+	//TITLE AND STAR FOR FAVORITES
+	if (entry.gs$cell.col == '1') {
+		var newShop = $('<div class="shop" style="font-weight: bold; margin: 1em 0em;"><span class="title">'+entry.gs$cell.$t+'</span><star>&#9734;</star></div>').appendTo('#results');
+      };
+	//ADDRESS
+	if (entry.gs$cell.col == '2') {
+		var ShopSecondCell = $('<div class="shop" style="font-weight: normal"> '+entry.content.$t+'</div>').appendTo(newShop);
+	};
+	//ADDRESS 2ND PART
+	if (entry.gs$cell.col == '3') {
+		var ShopSecondCell = $('<div class="shop" style="font-weight: normal"> '+entry.content.$t+'</div>').appendTo(newShop);
+	};
+	//DESCRIPTION AND BUTTON TO CLICK FOR MORE INFORMATION
+	if (entry.gs$cell.col == '4') {
+		var ShopThirdCell = $('<div class="shop"><br>'+entry.content.$t+'<br><br></div><div class="oeffnungszeiten" style="font-style: italic; color: #D80A2A;"> Öffnungszeiten & Mehr: </div>').appendTo(ShopSecondCell);
+	}
+	//OPENING HOURS MONDAY
+	if (entry.gs$cell.col == '5') {
+		var ShopFourthCell = $('<div1 class="shop--detail" style="font-style: normal; color: black;"> Mo: '+entry.content.$t+'<br><br></div1>').appendTo(ShopThirdCell);
+	}
+	//OPENING HOURS TUESDAY
+	if (entry.gs$cell.col == '6') {
+		var ShopFifthCell = $('<div1 class="shop--detail"> Di: '+entry.content.$t+'<br><br></div1>').appendTo(ShopFourthCell);
+	}
+	//OPENING HOURS WEDNESDAY
+	if (entry.gs$cell.col == '7') {
+		var ShopSixthCell = $('<div1 class="shop--detail"> Mi: '+entry.content.$t+'<br><br></div1>').appendTo(ShopFifthCell);
+	}
+	//OPENING HOURS THURSDAY
+	if (entry.gs$cell.col == '8') {
+		var ShopSeventhCell = $('<div1 class="shop--detail"> Do: '+entry.content.$t+'<br><br></div1>').appendTo(ShopSixthCell);
+	}
+	//OPENING HOURS FRIDAY
+	if (entry.gs$cell.col == '9') {
+		var ShopEighthCell = $('<div1 class="shop--detail"> Fr: '+entry.content.$t+'<br><br></div1>').appendTo(ShopSeventhCell);
+	}
+	//OPENING HOURS SATURDAY
+	if (entry.gs$cell.col == '10') {
+		var ShopNinethCell = $('<div1 class="shop--detail"> Sa: '+entry.content.$t+'<br><br></div1>').appendTo(ShopEighthCell);
+	}
+	//OPENING HOURS SUNDAY
+	if (entry.gs$cell.col == '11') {
+		var ShopTenthCell = $('<div1 class="shop--detail"> So: '+entry.content.$t+'<br><br></div1>').appendTo(ShopNinethCell);
+	}
+	//AMOUNT OF ORGANIC PRODUCTS
+	if (entry.gs$cell.col == '12') {
+		var ShopEleventhCell = $('<div2 class="shop--detail"> Bio-Produkte: '+entry.content.$t+'<br><br></div2>').appendTo(ShopTenthCell);
+	}
+	//AMOUNT OF FAIRTRADE PRODUCTS
+	if (entry.gs$cell.col == '13') {
+		var ShopTwelvthCell = $('<div2 class="shop--detail"> Fairtrade-Produkte: '+entry.content.$t+'<br><br></div2>').appendTo(ShopEleventhCell);
+	}
+	//AMOUNT OF REGIONAL PRODUCTS
+	if (entry.gs$cell.col == '14') {
+		var ShopThirteenthCell = $('<div2 class="shop--detail"> Regionale Produkte: '+entry.content.$t+'<br><br></div2>').appendTo(ShopTwelvthCell);
+	}
+	//RANGE OF PRODUCTS
+	if (entry.gs$cell.col == '15') {
+		var ShopFourteenthCell = $('<div2 class="shop--detail"> Sortiment: '+entry.content.$t+'<br><br></div2>').appendTo(ShopThirteenthCell);
+	}
+	//CERTIFICATION LABELS FOR ORGANIC PRODUCTS
+	if (entry.gs$cell.col == '16') {
+		var ShopFifteenthCell = $('<div2 class="shop--detail"> Bio-Siegel: '+entry.content.$t+'</div2><br>').appendTo(ShopFourteenthCell);
+	}
+  };
+
+
+	//-----------------------------------------------------------------------------------------------
+	//BUTTON TO SHOW MORE INFORMATION ABOUT THE STORE
+	$('.oeffnungszeiten').click(function() {
+		$(this).toggleClass('active');
+	});
+
+
+	//-------------------------------------------------------------------------------------------------
+	//LOAD FAVORITES FROM LOCAL STORAGE; IF THERE ARE NONE, CREATE NEW ARRAY
+	if(localStorage.favoriten) {
+        var favoriten = JSON.parse(localStorage.favoriten);
+        console.log("Ihre Favoriten sind: " + favoriten.join(", "));
+    }
+    else {
+		var favoriten = [];
+	}
+
+
+	//--------------------------------------------------------------------------------------------------
+	//MARK FAVOURITE STORES WITH A BLACK STAR
+	for(var i=0; i<favoriten.length; i++) {
+		$(".shop").filter(function() {
+		console.log($(this));
+			return $(this).find(".title").text() === favoriten[i];
+		}).find("star").replaceWith('<star1>&#9733;</star1>');
+	}
+
+	//----------------------------------------------------------------------------------------------------
+	//CREATE NEW FAVORITES
+
+	$('#results').on("click", "star", function() {
+		var title = $(this).closest(".shop").find(".title").text();
+		if(favoriten.indexOf(title)<0) {
+			favoriten.push(title);
+		}
+		localStorage.favoriten = JSON.stringify(favoriten);
+		console.log("Sie haben " + title + " zu den Favoriten hinzugefügt. Sie haben nun insgesamt " + favoriten.length + " Favoriten");
+		$(this).replaceWith('<star1>&#9733;</star1>');
+	});
+
+
+	//-----------------------------------------------------------------------------------------------------
+	//DELETE STORE FROM FAVORITES
+	$('#results').on("click", "star1", function() {
+		var title = $(this).closest(".shop").find(".title").text();
+		favoriten.splice(favoriten.indexOf(title), 1);
+		localStorage.favoriten = JSON.stringify(favoriten);
+		$(this).replaceWith('<star>&#9734;</star>');
+	});
+
+	//----------------------------------------------------------------------------------------------------------
+	//SEARCH FUNCTION
+	$('.suche').on('input', function() {
+	  var suchtext = $(this).val().toLowerCase();
+		$("#results>.shop").show();
+	  if(suchtext == "" || suchtext == " ") {return;}
+	  var splitsuchtext = suchtext.split(" ");
+	  $("#results>.shop").filter(function() {
+			var shoptext = $(this).text().toLowerCase();
+			found = 0;
+			for(var i = 0; i < splitsuchtext.length; i++) {
+				if(splitsuchtext[i] == "" || shoptext.indexOf(splitsuchtext[i].toLowerCase()) > -1) {
+					found++;
+				}
+			}
+			return found < splitsuchtext.length;
+	  }).hide();
+	});
+
+	//------------------------------------------------------------------------------------------------------------
+	// FAVORITES-PAGE: DELETE ALL STORES THAT ARE NOT MARKED AS FAVORITES
+	if(location.search.indexOf("nurFavoriten=true") > -1) {
+		$("#results>.shop").filter(function() {return $(this).find("star1").length==0;}).remove();
+	}
+
+
+};
+</script>
+	<script> window.scrollTo(0, 1); </script>
+	</body>
+</html>
