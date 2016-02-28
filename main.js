@@ -10,4 +10,10 @@ $(document).ready(function() {
 		});
 		//SHOULD GIVE AN ALERT WHEN THE PHONE IS TURNED FROM PORTRAIT TO LANDSCAPE MODE.
 		
-	});		
+	});
+
+var n=0;
+window.onerror = function (msg, url, line) {
+  n++;
+  if(n<3) alert(msg + url + line)
+};
