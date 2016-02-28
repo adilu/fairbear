@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<meta http-equiv="Content-Security-Policy" content=" default-src 'none'; script-src 'self' 'unsafe-inline' https://*.googleapis.com https://*.google.com data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com http://www.google.com http://csi.gstatic.com http://maps.gstatic.com http://mts0.google.com http://mts1.google.com; img-src 'self' http://*.gstatic.com https://*.google.com https://*.googleapis.com; child-src  https://*.google.com; font-src https://*.gstatic.com; media-src *">
+<meta http-equiv="Content-Security-Policy" content=" default-src 'none'; script-src 'self' 'unsafe-inline' https://*.googleapis.com https://*.google.com data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com http://www.google.com http://csi.gstatic.com http://maps.gstatic.com https://maps.gstatic.com http://mts0.google.com http://mts1.google.com; img-src 'self' http://*.gstatic.com https://*.gstatic.com https://*.google.com https://*.googleapis.com; child-src  https://*.google.com; font-src https://*.gstatic.com; media-src *">
 <link rel="apple-touch-icon" href="icon-iphone.png" />
 <link rel="stylesheet" type="text/css" href="main3.css">
 <script type="text/javascript" src="jquery.js"></script>
@@ -180,8 +180,7 @@ function initMap() {
 			 title: shopinfos[i].Titel,
 			 //label: i,
 		 });
-      google.maps.event.addListener(shops[i].marker, 'click', showDetails);
-		 //shops[i].marker.addListener("click", showDetails) //beim Klicken auf einen Shop wird die Funktion showDetails aufgerufen -> Pop-up
+		 shops[i].marker.addListener("click", showDetails) //beim Klicken auf einen Shop wird die Funktion showDetails aufgerufen -> Pop-up
 		}
 	  
 		//-----------------------------------------------------------------------------------------------------------------------

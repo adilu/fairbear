@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
     <widget xmlns   = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         id          = "ch.fb1"
         versionCode = "5"
         version     = "1.0.5" >
+
+    <gap:config-file platform="android" parent="/manifest">
+        <application android:debuggable="true" />
+    </gap:config-file>
 
     <!-- versionCode is optional and Android only -->
 
@@ -28,6 +33,7 @@
     <feature name="http://api.phonegap.com/1.0/network"/>
 
 	<plugin name="org.apache.cordova.statusbar" spec="0.1.4" source="pgb" />
+    <plugin name="plugin.google.maps.menusito" spec="1.2.5" source="pgb" />
 	<preference name="StatusBarOverlaysWebView" value="false"/>
 	<preference name="StatusBarBackgroundColor" value="#191924"/>
 	<preference name="StatusBarStyle" value="lightcontent" />
