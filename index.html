@@ -180,7 +180,8 @@ function initMap() {
 			 title: shopinfos[i].Titel,
 			 //label: i,
 		 });
-		 shops[i].marker.addListener("click", showDetails) //beim Klicken auf einen Shop wird die Funktion showDetails aufgerufen -> Pop-up
+      google.maps.event.addListener(shops[i].marker, 'click', showDetails);
+		 //shops[i].marker.addListener("click", showDetails) //beim Klicken auf einen Shop wird die Funktion showDetails aufgerufen -> Pop-up
 		}
 	  
 		//-----------------------------------------------------------------------------------------------------------------------
