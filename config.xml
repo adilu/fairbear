@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
     <widget xmlns   = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
-        id          = "ch.fb"
-        versionCode = "5" 
-        version     = "1.0.6" >
+        id          = "ch.fb1"
+        versionCode = "5"
+        version     = "1.0.5" >
 
     <!-- versionCode is optional and Android only -->
 
@@ -16,7 +16,7 @@
     <author email="fairbearapp@gmail.com">
         Seraina Schönenberger
     </author>
-    
+
     <icon src="icon.png" />
     <gap:splash src="splash.png" />
 
@@ -26,22 +26,21 @@
     <feature name="http://api.phonegap.com/1.0/file"/>
     <feature name="http://api.phonegap.com/1.0/geolocation"/>
     <feature name="http://api.phonegap.com/1.0/network"/>
-	
+
 	<plugin name="org.apache.cordova.statusbar" spec="0.1.4" source="pgb" />
 	<preference name="StatusBarOverlaysWebView" value="false"/>
 	<preference name="StatusBarBackgroundColor" value="#191924"/>
 	<preference name="StatusBarStyle" value="lightcontent" />
-    
-	
-   
+
+
+
     <access origin="*" subdomains="true" />
 
-	
-	
-	
+
+
 	<plugin name="cordova-plugin-whitelist" />
-    <allow-navigation href="*" />
-		
+  <allow-navigation href="*" />
+
 	<access origin="*" />
 
 	<allow-intent href="*"  />
